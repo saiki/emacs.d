@@ -46,7 +46,6 @@
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
-
 ;; rainbow-delimiters
 (when-not-installed-then-install rainbow-delimiters)
 (when (require 'rainbow-delimiters)
@@ -57,11 +56,16 @@
 (when (require 'eldoc)
   (eldoc-mode))
 
-(when (require 'ido)
-  (ido-mode t)
-  (ido-everywhere t)
-  (setq ido-enable-flex-matching t))
+;; elscreen
+(when-not-installed-then-install elscreen)
+(when (require 'elscreen)
+  (elscreen-start))
 
+;; powerline
+(when-not-installed-then-install powerline)
+(when (require 'powerline)
+  (powerline-default-theme))
+;; theme
 (when-not-installed-then-install color-theme)
 (when-not-installed-then-install darktooth-theme)
 (when (require 'color-theme)
@@ -85,20 +89,31 @@
   (setq grep-program "jvgrep")
   (setq grep-command "jvgrep "))
 
-(when-not-installed-then-install company)
-(when (require 'company)
-  (global-company-mode 1))
+(when-not-installed-then-install auto-complete)
+(when (require 'auto-complete-config)
+  (ac-config-default)
+  (setq ac-use-fuzzy t))
 
 (when-not-installed-then-install go-mode)
-(when-not-installed-then-install company-go)
+(when-not-installed-then-install go-autocomplete)
+(when-not-installed-then-install go-eldoc)
 (when (require 'go-mode)
-  (require 'company-go))
+  (require 'go-autocomplete)
+  (require 'go-eldoc))
 
-(defun my-java-setting ()
-  "java mode setting"
-  (setq tab-width 8))
-(add-hook 'java-mode-hook 'my-java-setting)
+(when-not-installed-then-install projectile)
+(require 'projectile)
 
-(when-not-installed-then-install elscreen)
-(when (require 'elscreen)
-  (elscreen-start))
+;; helm
+(when-not-installed-then-install helm)
+(when (require 'helm-config)
+  (when (require 'helm-command)
+	(setq helm-autoresize-max-height 0)
+	(setq helm-autoresize-min-height 20)
+	(helm-autoresize-mode 1)
+	(define-key global-map [remap find-file] 'helm-find-files)
+	(define-key global-map [remap occur] 'helm-occur)
+	(define-key global-map [remap list-buffers] 'helm-buffers-list)
+	(define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
+	(global-set-key (kbd "M-x") 'helm-M-x)
+	(helm-mode 1)))
