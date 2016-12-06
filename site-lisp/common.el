@@ -3,7 +3,7 @@
     (progn
       (tool-bar-mode 0)
       (menu-bar-mode -1)
-      (setq custom-theme-directory "~/.emacs.d/themes/")
+      (setq custom-theme-directory (expand-file-name "themes" user-emacs-directory))
       ;; (load-theme 'gnome2 t t)
       ;; (enable-theme 'gnome2)
 	  (scroll-bar-mode 0)
@@ -16,6 +16,7 @@
 (setq auto-save-default nil)
 ;; 日本語環境設定
 (set-language-environment "Japanese")
+(prefer-coding-system 'utf-8-unix)
 ;; (set-default-coding-systems 'utf-8)
 ;; (prefer-coding-system 'utf-8)
 ;; (cond
@@ -90,9 +91,8 @@
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 
-(defmacro when-not-installed-then-install (packaze)
-  (unless (package-installed-p packaze)
-	(package-refresh-contents) (package-install packaze)))
-
 (add-to-list 'backup-directory-alist
              (cons "." "~/.emacs.d/backups/"))
+
+(unless (file-exists-p (expand-file-name "site-lisp/common.elc" user-emacs-directory))
+  (byte-compile-file (expand-file-name "site-lisp/common.el" user-emacs-directory)))
