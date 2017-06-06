@@ -76,8 +76,6 @@
   (require 'company-go)
   (require 'go-eldoc))
 
-(require 'projectile)
-
 ;; helm
 (when (require 'helm-config)
   (when (require 'helm-command)
@@ -90,8 +88,5 @@
 	(define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
 	(global-set-key (kbd "M-x") 'helm-M-x)
 	(helm-mode 1)))
-
-(when (require 'jdee)
-  (setq jdee-server-dir (concat user-emacs-directory "jdee-server.jar")))
 
 (require 'magit)
