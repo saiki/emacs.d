@@ -1,9 +1,12 @@
 ;; package.el
+;;インストールしたパッケージにロードパスを通してロードする
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-;;インストールしたパッケージにロードパスを通してロードする
-(setq load-prefer-newer t)
+(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 (package-initialize)
+(when (not package-archive-contents)
+  (package-refresh-contents)
+  (package-install 'use-package))
 (require 'use-package)
 ;; auto compile elisp
 (use-package auto-compile
@@ -99,22 +102,25 @@
 	:config
 	(use-package helm-command
 	  :config (helm-autoresize-mode 1)))
-  :bind (
-	([remap find-file] . helm-find-files)
-	([remap occur] . helm-occur)
-	([remap list-buffers] . helm-buffers-list)
-	([remap dabbrev-expand] . helm-dabbrev)
-	("M-x" . helm-M-x)))
-;; (when (require 'helm-config)
-;;   (when (require 'helm-command)
-;; 	(setq helm-autoresize-max-height 0)
-;; 	(setq helm-autoresize-min-height 20)
-;; 	(helm-autoresize-mode 1)
-;; 	(define-key global-map [remap find-file] 'helm-find-files)
-;; 	(define-key global-map [remap occur] 'helm-occur)
-;; 	(define-key global-map [remap list-buffers] 'helm-buffers-list)
-;; 	(define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
-;; 	(global-set-key (kbd "M-x") 'helm-M-x)
-;; 	(helm-mode 1)))
+  (use-package helm-descbinds)
+  (helm-mode t)
+  :bind
+  ("M-x" . helm-M-x)
+  ("C-x C-f" . helm-find-files)
+  ([remap occur] . helm-occur)
+  ([remap list-buffers] . helm-buffers-list)
+  ([remap dabbrev-expand] . helm-dabbrev))
 
 (use-package magit)
+
+;; ensime
+(use-package ensime
+  :ensure t
+  :init (setq ensime-startup-notification nil)
+  :pin melpa-stable)
+
+(use-package which-key
+  :config
+  (which-key-setup-side-window-right-bottom)
+  (which-key-mode t)
+  )
