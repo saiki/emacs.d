@@ -58,6 +58,8 @@
 
 ;; elscreen
 (use-package elscreen
+  :init
+  (setq elscreen-tab-display-kill-screen nil)
   :config
   (elscreen-start))
 
@@ -66,7 +68,8 @@
   :config
   (powerline-default-theme))
 ;; theme
-(load-theme 'darktooth t)
+(use-package darktooth-theme)
+;; (load-theme 'darktooth t)
 
 (use-package neotree
   :commands neotree
@@ -94,6 +97,7 @@
 
 ;; helm
 (use-package helm
+  :ensure t
   :config
   (use-package helm-config
 	:init
@@ -113,14 +117,17 @@
 
 (use-package magit)
 
-;; ensime
-(use-package ensime
+;; meghanada
+(use-package meghanada
   :ensure t
-  :init (setq ensime-startup-notification nil)
-  :pin melpa-stable)
+  :init
+  (add-hook 'java-mode-hook
+			(lambda ()
+			  (meghanada-mode t)))
+  :commands meghanada-mode)
 
 (use-package which-key
+  :ensure t
   :config
   (which-key-setup-side-window-right-bottom)
-  (which-key-mode t)
-  )
+  (which-key-mode t))

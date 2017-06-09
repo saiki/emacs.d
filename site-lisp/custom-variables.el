@@ -8,7 +8,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-	(helm-descbinds which-key ensime use-package markdown-mode magit company-quickhelp yasnippet rainbow-delimiters powerline open-junk-file neotree helm go-eldoc elscreen darktooth-theme color-theme auto-compile company company-go))))
+	(meghanada helm-descbinds which-key use-package markdown-mode magit company-quickhelp yasnippet rainbow-delimiters powerline open-junk-file neotree helm go-eldoc elscreen darktooth-theme color-theme auto-compile company company-go))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
