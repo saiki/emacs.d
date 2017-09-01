@@ -8,6 +8,7 @@
   (package-refresh-contents)
   (package-install 'use-package))
 (require 'use-package)
+(setq use-package-verbose t)
 ;; auto compile elisp
 (use-package auto-compile
   :config
@@ -41,11 +42,11 @@
 
 ;; markdown
 (use-package markdown-mode
-  :commands markdown-mode
-  :init
-  (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode)))
 
 ;; rainbow-delimiters
 (use-package rainbow-delimiters
@@ -70,6 +71,7 @@
 ;; theme
 (use-package darktooth-theme)
 ;; (load-theme 'darktooth t)
+(global-hl-line-mode t)
 
 (use-package neotree
   :commands neotree
@@ -128,6 +130,47 @@
 
 (use-package which-key
   :ensure t
+  :init
+  (setq which-key-use-C-h-commands nil)
   :config
   (which-key-setup-side-window-right-bottom)
   (which-key-mode t))
+
+(use-package projectile
+  :ensure t
+  :pin melpa-stable
+  :config
+  (projectile-mode t)
+  (projectile-global-mode t))
+
+(use-package helm-projectile
+  :ensure t
+  :demand (helm . projectile)
+  :pin melpa-stable
+  :config
+  (helm-projectile-on)
+  (setq projectile-completion-system 'helm))
+
+(use-package php-mode
+  :ensure t
+  :mode "\\.php\\'")
+
+(use-package typescript-mode
+  :ensure t
+  :mode "\\.ts\\'")
+
+(use-package tide
+  :ensure t
+  :demand typescript-mode
+  :init
+  (add-hook 'typescript-mode-hook
+			(lambda ()
+			  (tide-setup)
+			  (eldoc-mode t)
+			  (company-mode-on)))
+  ;; formats the buffer before saving
+  (add-hook 'before-save-hook 'tide-format-before-save))
+
+(use-package vue-mode
+  :ensure t
+  )
