@@ -8,6 +8,7 @@
   (package-refresh-contents)
   (package-install 'use-package))
 (require 'use-package)
+(setq use-package-verbose t)
 ;; auto compile elisp
 (use-package auto-compile
   :config
@@ -22,13 +23,32 @@
 ;; äÓñ{ìIÇ»ê›íË
 (load "common")
 
+(use-package ivy
+  :ensure t
+  :init
+  (setq ivy-use-virtual-buffers t)
+  :config
+  (ivy-mode))
+
+(use-package counsel
+  :ensure t
+  :bind
+  (("M-x" . counsel-M-x)
+   ("C-x C-f" . counsel-find-file)
+   ("C-c g" . counsel-git)
+   ("C-c j" . counsel-git-grep)))
+
+(use-package swiper
+  :ensure t
+  :bind
+  ("C-s" . swiper))
+
 ;; wdired
 (use-package wdired
-  :bind (
-		 ("C-x C-d" . dired)
-		 :map dired-mode-map
-			  ("r" . wdired-change-to-wdired-mode)
-		 ))
+  :bind
+  (("C-x C-d" . dired)
+  :map dired-mode-map
+  ("r" . wdired-change-to-wdired-mode)))
 
 ;; yasnippet
 (use-package yasnippet
@@ -41,11 +61,11 @@
 
 ;; markdown
 (use-package markdown-mode
-  :commands markdown-mode
-  :init
-  (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode)))
 
 ;; rainbow-delimiters
 (use-package rainbow-delimiters
@@ -70,6 +90,7 @@
 ;; theme
 (use-package darktooth-theme)
 ;; (load-theme 'darktooth t)
+(global-hl-line-mode t)
 
 (use-package neotree
   :commands neotree
@@ -95,26 +116,6 @@
   (use-package company-go)
   (use-package go-eldoc))
 
-;; helm
-(use-package helm
-  :ensure t
-  :config
-  (use-package helm-config
-	:init
-	(setq helm-autoresize-max-height 0)
-	(setq helm-autoresize-min-height 20)
-	:config
-	(use-package helm-command
-	  :config (helm-autoresize-mode 1)))
-  (use-package helm-descbinds)
-  (helm-mode t)
-  :bind
-  ("M-x" . helm-M-x)
-  ("C-x C-f" . helm-find-files)
-  ([remap occur] . helm-occur)
-  ([remap list-buffers] . helm-buffers-list)
-  ([remap dabbrev-expand] . helm-dabbrev))
-
 (use-package magit)
 
 ;; meghanada
@@ -128,6 +129,31 @@
 
 (use-package which-key
   :ensure t
+  :init
+  (setq which-key-use-C-h-commands nil)
   :config
   (which-key-setup-side-window-right-bottom)
   (which-key-mode t))
+
+(use-package projectile
+  :ensure t
+  :pin melpa-stable
+  :config
+  (projectile-mode t))
+
+(use-package typescript-mode
+  :ensure t
+  :mode "\\.ts\\'")
+
+(use-package tide
+  :ensure t
+  :demand typescript-mode
+  :init
+  (add-hook 'typescript-mode-hook
+			(lambda ()
+			  (tide-setup)
+			  (eldoc-mode t)
+			  (company-mode-on)))
+  ;; formats the buffer before saving
+  (add-hook 'before-save-hook 'tide-format-before-save))
+
