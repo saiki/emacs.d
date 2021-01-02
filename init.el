@@ -228,6 +228,7 @@
 (use-package lsp-treemacs
   :ensure t
   :defer t
+  :after treemacs
   :commands lsp-treemacs-errors-list)
 
 ;; optionally if you want to use debugger
