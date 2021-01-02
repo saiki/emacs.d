@@ -59,14 +59,6 @@
 ;; junk file
 (use-package open-junk-file)
 
-;; markdown
-(use-package markdown-mode
-  :ensure t
-  :commands (markdown-mode gfm-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode)))
-
 ;; rainbow-delimiters
 (use-package rainbow-delimiters
   :config
@@ -88,8 +80,14 @@
   :config
   (powerline-default-theme))
 ;; theme
-(use-package darktooth-theme)
+;; (use-package darktooth-theme)
+(use-package spacemacs-theme
+  :defer t
+  :init (load-theme 'spacemacs-dark t))
+;; (use-package gruvbox-theme)
 ;; (load-theme 'darktooth t)
+(load-theme 'spacemacs-dark t)
+
 (global-hl-line-mode t)
 
 (use-package neotree
@@ -110,6 +108,14 @@
   :config
   (global-company-mode t)
   (company-quickhelp-mode t))
+
+;; markdown
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode)))
 
 (use-package go-mode
   :config
