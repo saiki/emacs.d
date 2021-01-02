@@ -11,6 +11,7 @@
 (setq use-package-verbose t)
 ;; auto compile elisp
 (use-package auto-compile
+  :ensure t
   :config
   (auto-compile-on-load-mode 1)
   (auto-compile-on-save-mode 1))
@@ -45,6 +46,7 @@
 
 ;; wdired
 (use-package wdired
+  :ensure t
   :bind
   (("C-x C-d" . dired)
   :map dired-mode-map
@@ -52,86 +54,33 @@
 
 ;; yasnippet
 (use-package yasnippet
+  :ensure t
   :diminish yas-minor-mode
   :config
   (yas-global-mode t))
 
 ;; junk file
-(use-package open-junk-file)
+(use-package open-junk-file
+  :ensure t)
 
 ;; rainbow-delimiters
 (use-package rainbow-delimiters
+  :ensure t
   :config
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 ;; eldoc
 (use-package eldoc
+  :ensure t
   :config
   (eldoc-mode))
 
 ;; elscreen
 (use-package elscreen
+  :ensure t
   :init
   (setq elscreen-tab-display-kill-screen nil)
   :config
   (elscreen-start))
-
-;; powerline
-(use-package powerline
-  :config
-  (powerline-default-theme))
-;; theme
-;; (use-package darktooth-theme)
-(use-package spacemacs-theme
-  :defer t
-  :init (load-theme 'spacemacs-dark t))
-;; (use-package gruvbox-theme)
-;; (load-theme 'darktooth t)
-(load-theme 'spacemacs-dark t)
-
-(global-hl-line-mode t)
-
-(use-package neotree
-  :commands neotree
-  :init
-  ;; 隠しファイルをデフォルトで表示
-  (setq neo-show-hidden-files t)
-  ;; neotree でファイルを新規作成した後、自動的にファイルを開く
-  (setq neo-create-file-auto-open t)
-  ;; delete-other-window で neotree ウィンドウを消さない
-  (setq neo-persist-show t)
-  ;; キーバインドをシンプルにする
-  (setq neo-keymap-style 'concise)
-  ;; windowサイズを可変にする
-  (setq neo-window-fixed-size nil))
-
-(use-package company
-  :config
-  (global-company-mode t)
-  (company-quickhelp-mode t))
-
-;; markdown
-(use-package markdown-mode
-  :ensure t
-  :commands (markdown-mode gfm-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode)))
-
-(use-package go-mode
-  :config
-  (use-package company-go)
-  (use-package go-eldoc))
-
-(use-package magit)
-
-;; meghanada
-(use-package meghanada
-  :ensure t
-  :init
-  (add-hook 'java-mode-hook
-			(lambda ()
-			  (meghanada-mode t)))
-  :commands meghanada-mode)
 
 (use-package which-key
   :ensure t
@@ -141,18 +90,182 @@
   (which-key-setup-side-window-right-bottom)
   (which-key-mode t))
 
+;; powerline
+(use-package powerline
+  :ensure t
+  :config
+  (powerline-default-theme))
+;; theme
+;; (use-package darktooth-theme)
+(use-package spacemacs-theme
+  :ensure t
+  :defer t
+  :init (load-theme 'spacemacs-dark t))
+;; (use-package gruvbox-theme)
+;; (load-theme 'darktooth t)
+(load-theme 'spacemacs-dark t)
+(global-hl-line-mode t)
+
+(use-package magit
+  :ensure t)
+
 (use-package projectile
   :ensure t
   :pin melpa-stable
   :config
   (projectile-mode t))
 
+(use-package treemacs
+  :ensure t
+  :defer t
+  :config
+  (progn
+    (setq treemacs-collapse-dirs                 (if treemacs-python-executable 3 0)
+          treemacs-deferred-git-apply-delay      0.5
+          treemacs-directory-name-transformer    #'identity
+          treemacs-display-in-side-window        t
+          treemacs-eldoc-display                 t
+          treemacs-file-event-delay              5000
+          treemacs-file-extension-regex          treemacs-last-period-regex-value
+          treemacs-file-follow-delay             0.2
+          treemacs-file-name-transformer         #'identity
+          treemacs-follow-after-init             t
+          treemacs-git-command-pipe              ""
+          treemacs-goto-tag-strategy             'refetch-index
+          treemacs-indentation                   2
+          treemacs-indentation-string            " "
+          treemacs-is-never-other-window         nil
+          treemacs-max-git-entries               5000
+          treemacs-missing-project-action        'ask
+          treemacs-move-forward-on-expand        nil
+          treemacs-no-png-images                 nil
+          treemacs-no-delete-other-windows       t
+          treemacs-project-follow-cleanup        nil
+          treemacs-persist-file                  (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+          treemacs-position                      'left
+          treemacs-read-string-input             'from-child-frame
+          treemacs-recenter-distance             0.1
+          treemacs-recenter-after-file-follow    nil
+          treemacs-recenter-after-tag-follow     nil
+          treemacs-recenter-after-project-jump   'always
+          treemacs-recenter-after-project-expand 'on-distance
+          treemacs-show-cursor                   nil
+          treemacs-show-hidden-files             t
+          treemacs-silent-filewatch              nil
+          treemacs-silent-refresh                nil
+          treemacs-sorting                       'alphabetic-asc
+          treemacs-space-between-root-nodes      t
+          treemacs-tag-follow-cleanup            t
+          treemacs-tag-follow-delay              1.5
+          treemacs-user-mode-line-format         nil
+          treemacs-user-header-line-format       nil
+          treemacs-width                         35
+          treemacs-workspace-switch-cleanup      nil)
+
+    ;; The default width and height of the icons is 22 pixels. If you are
+    ;; using a Hi-DPI display, uncomment this to double the icon size.
+    ;;(treemacs-resize-icons 44)
+
+    (treemacs-follow-mode t)
+    (treemacs-filewatch-mode t)
+    (treemacs-fringe-indicator-mode 'always)
+    (pcase (cons (not (null (executable-find "git")))
+                 (not (null treemacs-python-executable)))
+      (`(t . t)
+       (treemacs-git-mode 'deferred))
+      (`(t . _)
+       (treemacs-git-mode 'simple))))
+  :bind
+  (:map global-map
+        ("M-0"       . treemacs-select-window)
+        ("C-x t 1"   . treemacs-delete-other-windows)
+        ("C-x t t"   . treemacs)
+        ("C-x t B"   . treemacs-bookmark)
+        ("C-x t C-t" . treemacs-find-file)
+        ("C-x t M-t" . treemacs-find-tag)))
+
+(use-package treemacs-projectile
+  :after treemacs projectile
+  :ensure t)
+
+(use-package treemacs-icons-dired
+  :after treemacs dired
+  :ensure t
+  :config (treemacs-icons-dired-mode))
+
+(use-package treemacs-magit
+  :after treemacs magit
+  :ensure t)
+
+;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+(setq lsp-keymap-prefix "s-l")
+
+(use-package lsp-mode
+  :ensure t
+  :defer t
+  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
+         (go-mode . lsp)
+		 (rust-mode . lsp)
+         ;; if you want which-key integration
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+;; optionally
+(use-package lsp-ui
+  :ensure t
+  :defer t
+  :commands lsp-ui-mode)
+;; if you are helm user
+(use-package helm-lsp
+  :ensure t
+  :defer t
+  :commands helm-lsp-workspace-symbol)
+;; if you are ivy user
+(use-package lsp-ivy
+  :ensure t
+  :defer t
+  :commands lsp-ivy-workspace-symbol)
+(use-package lsp-treemacs
+  :ensure t
+  :defer t
+  :commands lsp-treemacs-errors-list)
+
+;; optionally if you want to use debugger
+(use-package dap-mode
+  :ensure t
+  :defer t)
+;; (use-package dap-LANGUAGE) to load the dap adapter for your language
+
+(use-package company
+  :ensure t
+  :defer t
+  :init
+  :hook (after-init . global-company-mode))
+
+;; markdown
+(use-package markdown-mode
+  :ensure t
+  :defer t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode)))
+
+(use-package go-mode
+  :defer t
+  :ensure t
+  :config
+  (use-package company-go)
+  (use-package go-eldoc)
+  :mode "\\.go\\'")
+
 (use-package typescript-mode
   :ensure t
+  :defer t
   :mode "\\.ts\\'")
-
 (use-package tide
   :ensure t
+  :defer t
   :demand typescript-mode
   :init
   (add-hook 'typescript-mode-hook
@@ -163,3 +276,12 @@
   ;; formats the buffer before saving
   (add-hook 'before-save-hook 'tide-format-before-save))
 
+(use-package rust-mode
+  :ensure t
+  :defer t
+  :custom rust-format-on-save t
+  :mode "\\.rs\\'")
+
+(use-package cargo
+  :ensure t
+  :hook (rust-mode . cargo-minor-mode))
