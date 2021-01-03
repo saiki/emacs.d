@@ -107,7 +107,8 @@
 (global-hl-line-mode t)
 
 (use-package magit
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package projectile
   :ensure t
@@ -206,6 +207,7 @@
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          (go-mode . lsp)
 		 (rust-mode . lsp)
+		 (csharp-mode . lsp)
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
@@ -286,3 +288,9 @@
 (use-package cargo
   :ensure t
   :hook (rust-mode . cargo-minor-mode))
+
+
+(use-package csharp-mode
+  :ensure t
+  :defer t
+  :mode "\\.cs\\'")
